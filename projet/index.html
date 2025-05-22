@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Correction : <video> ne peut pas contenir <img> ni <button> -->
+  <button onclick="getLocation()" class="btn btn-primary">📍 Afficher ma localisation sur Google Maps</button>
+<p id="location-output"></p>
+<div id="map-frame" style="margin-top: 15px;"></div>
+
+<script>
+  function getLocation() {
+    const output = document.getElementById("location-output");
+    const mapFrame = document.getElementById("map-frame");
+
+    if (!navigator.geolocation) {
+      output.textContent = "La géolocalisation n'est pas prise en charge par ce navigateur.";
+      return;
+    }
+
+    output.textContent = "Recherche de la localisation...";
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        output.innerHTML = `📌 Votre position actuelle : Latitude: ${lat.toFixed(6)}, Longitude: ${lon.toFixed(6)}`;
+
+        const mapUrl = `https://www.google.com/maps?q=${lat},${lon}&hl=fr&z=15&output=embed`;
+        mapFrame.innerHTML = `<iframe width="100%" height="400" frameborder="0" style="border:0;border-radius:10px;" src="${mapUrl}" allowfullscreen></iframe>`;
+      },
+      (error) => {
+        output.textContent = "Impossible de récupérer la localisation : " + error.message;
+      }
+    );
+  }
+</script>
+
+</body>
+</html>
